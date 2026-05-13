@@ -144,6 +144,9 @@ The server can be customized with the following environment variables:
 - `TURN_HOST` – Hostname or IP address of the TURN server. Defaults to `127.0.0.1`.
 - `TURN_REALM` – Realm used when generating TURN credentials. Defaults to `file.pizza`.
 - `STUN_SERVER` – STUN server URL to use when `COTURN_ENABLED` is disabled. Defaults to `stun:stun.l.google.com:19302`.
+- `PEERJS_HOST` – Hostname or IP address to the self-hosted PeerJS server. Defaults to `0.peerjs.com`.
+- `PEERJS_PATH` – Path to self-hosted PeerJS server. Defaults to `/`.
+- `PEERJS_SERVERS` – Comma-separated list of one or more PeerJS signaling server URLs (e.g. `https://peerjs.example.com/filepizza` or `https://primary.example.com/filepizza,https://backup.example.com/filepizza`). Takes precedence over `PEERJS_HOST` and `PEERJS_PATH` when set, and unlike them supports full URLs including scheme, port, and path. The first entry is used as the active signaling server; additional entries are exposed to clients for future failover. Falls back to `0.peerjs.com` when neither this nor `PEERJS_HOST` is set.
 
 ## FAQ
 

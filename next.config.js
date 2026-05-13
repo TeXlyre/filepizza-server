@@ -4,7 +4,12 @@ const nextConfig = {
   // The uploader and downloader are both using useEffect to listen for peerjs events
   // which causes the connection to be created twice.
   reactStrictMode: false,
-  output: 'standalone'
+  output: 'standalone',
+  async rewrites() {
+    return [
+      { source: '/api/peerjs-servers', destination: '/api/ice' },
+    ]
+  },
 }
 
 module.exports = nextConfig

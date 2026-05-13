@@ -1,5 +1,4 @@
 'use client'
-
 import React, {
   JSX,
   useState,
@@ -30,74 +29,35 @@ export const useWebRTCPeer = (): WebRTCPeerValue => {
 let globalPeer: Peer | null = null
 
 async function getOrCreateGlobalPeer(): Promise<Peer> {
-  console.log('[WebRTCProvider] getOrCreateGlobalPeer called')
-
   if (!globalPeer) {
-    console.log('[WebRTCProvider] Creating new global peer')
-
-    const response = await fetch('/api/ice', {
-      method: 'POST',
-    })
-    const { iceServers } = await response.json()
+    const response = await fetch('/api/ice', { method: 'POST' })
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ICE config: ${response.status}`)
+    }
+    const { host, path, port, secure, iceServers } = await response.json()
     console.log('[WebRTCProvider] ICE servers:', iceServers)
+    console.log('[WebRTCProvider] host:', host)
+    console.log('[WebRTCProvider] path:', path)
 
-    let peerConfig: any = {
+    globalPeer = new Peer({
       debug: 3,
-      config: {
-        iceServers,
-      },
-    }
-
-    console.log('[WebRTCProvider] About to fetch /api/peerjs-servers')
-
-    try {
-      const peerServersResponse = await fetch('/api/peerjs-servers')
-      console.log('[WebRTCProvider] Response status:', peerServersResponse.status)
-
-      if (peerServersResponse.ok) {
-        const data = await peerServersResponse.json()
-        console.log('[WebRTCProvider] Response data:', data)
-
-        if (data.servers && data.servers.length > 0) {
-          const serverUrlString = data.servers[0]
-          console.log('[WebRTCProvider] Using server:', serverUrlString)
-
-          const serverUrl = new URL(serverUrlString)
-          peerConfig = {
-            ...peerConfig,
-            host: serverUrl.hostname,
-            port: serverUrl.port ? parseInt(serverUrl.port) : (serverUrl.protocol === 'https:' ? 443 : 80),
-            path: serverUrl.pathname,
-            secure: serverUrl.protocol === 'https:',
-          }
-          console.log('[WebRTCProvider] Final config:', peerConfig)
-        } else {
-          console.log('[WebRTCProvider] No servers found, using default')
-        }
-      } else {
-        console.log('[WebRTCProvider] Bad response:', peerServersResponse.status)
-      }
-    } catch (error) {
-      console.error('[WebRTCProvider] Fetch error:', error)
-    }
-
-    console.log('[WebRTCProvider] Creating Peer with config:', peerConfig)
-    globalPeer = new Peer(peerConfig)
+      host,
+      path,
+      port,
+      secure,
+      config: { iceServers },
+    })
   }
-
   if (globalPeer.id) {
     return globalPeer
   }
-
   await new Promise<void>((resolve) => {
-    const listener = (id: string) => {
-      console.log('[WebRTCProvider] Peer ID:', id)
+    const listener = () => {
       globalPeer?.off('open', listener)
       resolve()
     }
     globalPeer?.on('open', listener)
   })
-
   return globalPeer
 }
 
@@ -111,7 +71,6 @@ export default function WebRTCPeerProvider({
   const [error, setError] = useState<Error | null>(null)
 
   const stop = useCallback(() => {
-    console.log('[WebRTCProvider] Stopping peer')
     globalPeer?.destroy()
     globalPeer = null
     setPeerValue(null)
@@ -127,15 +86,12 @@ export default function WebRTCPeerProvider({
   if (error) {
     return <ErrorMessage message={error.message} />
   }
-
   if (isStopped) {
     return <></>
   }
-
   if (!peerValue) {
     return <Loading text="Initializing WebRTC peer..." />
   }
-
   return (
     <WebRTCContext.Provider value={value}>{children}</WebRTCContext.Provider>
   )
