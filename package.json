@@ -45,6 +45,13 @@
   "bugs": {
     "url": "https://github.com/TeXlyre/filepizza/issues"
   },
+  "pnpm": {
+    "overrides": {
+      "ajv@<6.14.0": ">=6.14.0",
+      "body-parser@>=2.2.0 <2.2.1": ">=2.2.1",
+      "brace-expansion@<1.1.13": ">=1.1.13"
+    }
+  },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",
     "@tanstack/react-query": "^5.55.2",
