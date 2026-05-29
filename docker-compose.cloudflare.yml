@@ -30,9 +30,10 @@ services:
     environment:
       - PORT=80
       - REDIS_URL=redis://redis:${REDIS_PORT:-6379}
-      - COTURN_ENABLED=true
+      - COTURN_ENABLED=false
       - TURN_REALM=https://${HOST_DOMAIN}
       - TURN_HOST=${HOST_DOMAIN}
+      - STUN_SERVER=${STUN_SERVER:-}
       - API_ORIGINS=${API_ORIGINS}
       - CLOUDFLARE_TUNNEL=true
       - PEERJS_SERVERS=${PEERJS_SERVERS:-}

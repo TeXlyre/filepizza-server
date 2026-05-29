@@ -8,7 +8,10 @@ HOST_DOMAIN=filepizza.example.com
 
 # PeerJS URL and Redis PORT
 # REDIS_PORT=6379
-# PEERJS_SERVERS=https://peerjs.example.com/peerjs/myapp
+# PEERJS_SERVERS=wss://peerjs.example.com/texlyre/
+
+# STUN when COTURN_ENABLED=false (check the compose file) e.g.,
+# STUN_SERVER=stun:stun.cloudflare.com:3478
 
 # CORS Configuration
 API_ORIGINS=https://filepizza.example.com,https://myapp.example.com,http://localhost:8081
