@@ -8,12 +8,12 @@ HOST_DOMAIN=filepizza.example.com
 
 # PeerJS URL and Redis PORT
 # REDIS_PORT=6379
-# PEERJS_SERVERS=wss://peerjs.example.com/texlyre/
+# PEERJS_SERVERS=https://peerjs.example.com/texlyre/
 
 # STUN when COTURN_ENABLED=false (check the compose file) e.g.,
 # STUN_SERVER=stun:stun.cloudflare.com:3478
 
-# CORS Configuration
+# CORS Configuration (make sure to also allow origins running filepizza-client https://github.com/TeXlyre/filepizza-client )
 API_ORIGINS=https://filepizza.example.com,https://myapp.example.com,http://localhost:8081
 
 # Cloudflare Tunnel Configuration
