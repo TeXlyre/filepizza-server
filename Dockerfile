@@ -10,7 +10,7 @@ RUN pnpm install --frozen-lockfile
 FROM node:lts-alpine AS builder
 RUN apk add --no-cache pnpm
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY . .
 # Builds standalone output
 RUN pnpm build
